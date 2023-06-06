@@ -4,48 +4,80 @@ module.exports = {
     toField: '#to',
     phoneNumberField: '#phone',
     codeField: '#code',
+    creditCardField: '#number',
+    cvvField: 'div=card-code-input',
     // Buttons
-    callATaxiButton: 'button=Call a taxi',
-    phoneNumberButton: '//div[starts-with(text(), "Phone number")]',
+    callATaxiButton: '//button[contains(text(), "Call a taxi")]',
+    phoneNumberButton: '//div[contains(text(), "Phone number")]',
+    paymentMethodButton: '.pp-text=Payment method',
+    addCardButton: '.pp-title=Add card',
+    linkButton: '//button[contains(text(), "Link")]',
     nextButton: 'button=Next',
     confirmButton: 'button=Confirm',
-    // Modals
-    phoneNumberModal: '.modal',
-    // Functions
-    fillAddresses: async function(from, to) {
-        const fromField = await $(this.fromField);
-        await fromField.setValue(from);
-        const toField = await $(this.toField);
-        await toField.setValue(to);
-        const callATaxiButton = await $(this.callATaxiButton);
-        await callATaxiButton.waitForDisplayed();
-        await callATaxiButton.click();
-    },
-    fillPhoneNumber: async function(phoneNumber) {
-        const phoneNumberButton = await $(this.phoneNumberButton);
-        await phoneNumberButton.waitForDisplayed();
-        await phoneNumberButton.click();
-        const phoneNumberModal = await $(this.phoneNumberModal);
-        await phoneNumberModal.waitForDisplayed()
-        const phoneNumberField = await $(this.phoneNumberField);
-        await phoneNumberField.waitForDisplayed();
-        await phoneNumberField.setValue(phoneNumber);
-    },
-    submitPhoneNumber: async function(phoneNumber) {
-        await this.fillPhoneNumber(phoneNumber);
-        // we are starting interception of request from the moment of method call
-        await browser.setupInterceptor();
-        await $(this.nextButton).click();
-        // we should wait for response
-        // eslint-disable-next-line wdio/no-pause
-        await browser.pause(2000);
-        const codeField = await $(this.codeField);
-        // collect all responses
-        const requests = await browser.getRequests();
-        // use first response
-        await expect(requests.length).toBe(1)
-        const code = await requests[0].response.body.code
-        await codeField.setValue(code)
-        await $(this.confirmButton).click()
-    },
+    paymentMethod: 'div=Payment method',
+    closeButton: '.payment-picker .section.active .close-button',
+    // Checkboxes
+
+  // Modals
+  phoneNumberModal: '.modal',
+  paymentMethodModal: '.modal',
+  // Functions
+  fillAddresses: async function (from, to) {
+    const fromField = await $(this.fromField);
+    await fromField.setValue(from);
+    const toField = await $(this.toField);
+    await toField.setValue(to);
+    const callATaxiButton = await $(this.callATaxiButton);
+    await callATaxiButton.waitForDisplayed();
+    await callATaxiButton.click();
+  },
+
+  clickSupportivePlan: async function () {
+    const supportivePlan = await $('div=Supportive');
+    await supportivePlan.waitForDisplayed();
+    await supportivePlan.click();
+  },
+  
+  fillPhoneNumber: async function(phoneNumber) {
+    const phoneNumberButton = await $(this.phoneNumberButton);
+    await phoneNumberButton.waitForDisplayed();
+    await phoneNumberButton.click();
+    const phoneNumberModal = await $(this.phoneNumberModal);
+    await phoneNumberModal.waitForDisplayed()
+    const phoneNumberField = await $(this.phoneNumberField);
+    await phoneNumberField.waitForDisplayed();
+    await phoneNumberField.setValue(phoneNumber);
+},
+submitPhoneNumber: async function(phoneNumber) {
+    await this.fillPhoneNumber(phoneNumber);
+    await browser.setupInterceptor();
+    await $(this.nextButton).click();
+    await browser.pause(100);
+    const codeField = await $(this.codeField);
+    const requests = await browser.getRequests();
+    const code = await requests[0].response.body.code
+    await codeField.setValue(code)
+    await $(this.confirmButton).click()
+},
+
+
+  fillCreditCard: async function(cardNumber) {
+    const cardNumberField = await $("#number");
+    await cardNumberField.waitForDisplayed();
+    await cardNumberField.setValue(cardNumber);
+    await browser.pause(300);
+    const cvvField = await $(".card-second-row #code");
+    await cvvField.waitForDisplayed();
+    await cvvField.setValue('123');
+    await browser.pause(300);
+
+    const body = await $("body");
+    await body.click();
+    await browser.pause(300);
+    const linkButton = await $(this.linkButton);
+    await linkButton.waitForClickable();
+    await linkButton.click();
+    await browser.pause(300);
+
+  }
 };
