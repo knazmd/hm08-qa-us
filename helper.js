@@ -7,26 +7,19 @@ module.exports = {
     return await $(`div=${obj.toString()}`);
   },
   generateCreditCardNumber: function() {
-    const prefix = "4"; // Assume Visa card
-    const length = 16; // Standard credit card length
-    let cardNumber = prefix;
-
-    while (cardNumber.length < length) {
-      const randomNumber = Math.floor(Math.random() * 10);
-      cardNumber += randomNumber;
-    }
-
+        const length = 16; // Standard credit card length
+    
+      const randomNumber = Math.floor(Math.random() * Math.pow(10, length));
+      cardNumber = randomNumber;
+    
     return cardNumber;
   },
   generateVerificationCode: function() {
     const length = 3; // Verification code length
-    let code = "";
 
-    for (let i = 0; i < length; i++) {
-      const randomNumber = Math.floor(Math.random() * 10);
-      code += randomNumber;
-    }
-
-    return code;
+      const randomNumber = Math.floor(Math.random() * Math.pow(10, length));
+      cvv = randomNumber;
+    
+    return cvv;
   },
 };

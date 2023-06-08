@@ -5,7 +5,7 @@ module.exports = {
     phoneNumberField: '#phone',
     codeField: '#code',
     creditCardField: '#number',
-    cvvField: 'div=card-code-input',
+    cvvField: '.card-second-row #code',
     // Buttons
     callATaxiButton: '//button[contains(text(), "Call a taxi")]',
     phoneNumberButton: '//div[contains(text(), "Phone number")]',
@@ -16,8 +16,11 @@ module.exports = {
     confirmButton: 'button=Confirm',
     paymentMethod: 'div=Payment method',
     closeButton: '.payment-picker .section.active .close-button',
-    // Checkboxes
-
+    comment: '#comment',
+    slider: 'div.r.r-type-switch .slider',
+    counterPlusButton: 'div.r.sub.r-type-counter .counter-plus',
+    orderButton: 'button.smart-button',
+    supportivePlan: 'div=Supportive',
   // Modals
   phoneNumberModal: '.modal',
   paymentMethodModal: '.modal',
@@ -33,7 +36,7 @@ module.exports = {
   },
 
   clickSupportivePlan: async function () {
-    const supportivePlan = await $('div=Supportive');
+    const supportivePlan = await $(this.supportivePlan);
     await supportivePlan.waitForDisplayed();
     await supportivePlan.click();
   },
@@ -62,7 +65,7 @@ submitPhoneNumber: async function(phoneNumber) {
 
 
   fillCreditCard: async function(cardNumber) {
-    const cardNumberField = await $("#number");
+    const cardNumberField = await $(this.creditCardField);
     await cardNumberField.waitForDisplayed();
     await cardNumberField.setValue(cardNumber);
     await browser.pause(300);
