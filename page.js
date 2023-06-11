@@ -68,17 +68,13 @@ module.exports = {
     const cardNumberField = await $(this.creditCardField);
     await cardNumberField.waitForDisplayed();
     await cardNumberField.setValue(cardNumber);
-    await browser.pause(300);
     const cvvField = await $(".card-second-row #code");
     await cvvField.waitForDisplayed();
     await cvvField.setValue('123');
-    await browser.pause(300);
     const body = await $("body");
     await body.click();
-    await browser.pause(300);
     const linkButton = await $(this.linkButton);
     await linkButton.waitForClickable();
     await linkButton.click();
-    await browser.pause(300);
   }
 };
