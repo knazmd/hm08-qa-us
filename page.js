@@ -40,7 +40,7 @@ module.exports = {
     await supportivePlan.waitForDisplayed();
     await supportivePlan.click();
   },
-  
+
   fillPhoneNumber: async function(phoneNumber) {
     const phoneNumberButton = await $(this.phoneNumberButton);
     await phoneNumberButton.waitForDisplayed();
@@ -50,19 +50,19 @@ module.exports = {
     const phoneNumberField = await $(this.phoneNumberField);
     await phoneNumberField.waitForDisplayed();
     await phoneNumberField.setValue(phoneNumber);
-},
-submitPhoneNumber: async function(phoneNumber) {
+  },
+
+  submitPhoneNumber: async function(phoneNumber) {
     await this.fillPhoneNumber(phoneNumber);
     await browser.setupInterceptor();
     await $(this.nextButton).click();
-    await browser.pause(100);
+    await browser.pause(2000);
     const codeField = await $(this.codeField);
     const requests = await browser.getRequests();
     const code = await requests[0].response.body.code
     await codeField.setValue(code)
     await $(this.confirmButton).click()
-},
-
+  },
 
   fillCreditCard: async function(cardNumber) {
     const cardNumberField = await $(this.creditCardField);
@@ -73,7 +73,6 @@ submitPhoneNumber: async function(phoneNumber) {
     await cvvField.waitForDisplayed();
     await cvvField.setValue('123');
     await browser.pause(300);
-
     const body = await $("body");
     await body.click();
     await browser.pause(300);
@@ -81,6 +80,5 @@ submitPhoneNumber: async function(phoneNumber) {
     await linkButton.waitForClickable();
     await linkButton.click();
     await browser.pause(300);
-
   }
 };
