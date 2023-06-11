@@ -1,12 +1,12 @@
+//This is the correct file! Uploaded to the wrong directory...
 const page = require('../../page');
 const helper = require('../../helper');
 
 describe('Ordering a Taxi', () => {
-
-  it('Setting the adddress', async () => {
-    beforeEach(async () => {
+  beforeEach(async () => {
     await browser.reloadSession(); 
     });
+  it('Setting the adddress', async () => {
     await browser.url('/');
     await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
     const fromFieldValue = await $(page.fromField).getValue();
