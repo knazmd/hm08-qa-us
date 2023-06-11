@@ -145,7 +145,7 @@ describe('Ordering a Taxi', () => {
     await messageField.setValue(message);
     const messageFieldValue = await messageField.getValue();
     expect(messageFieldValue).toEqual(message);
-    const slider = await $(page.slider);
+    const slider = await $(page.slider);  //Right here, on this step, without the reload session, slider keeps ON and this is why I am using browser reload session to reset values...
     await slider.waitForClickable();
     await slider.click();
     const counterPlusButton = await $(page.counterPlusButton);
