@@ -19,11 +19,16 @@ module.exports = {
     comment: '#comment',
     slider: 'div.r.r-type-switch .slider',
     counterPlusButton: 'div.r.sub.r-type-counter .counter-plus',
+    counterValue: 'div.r-counter .counter-value',
     orderButton: 'button.smart-button',
     supportivePlan: 'div=Supportive',
+    creditCardCheck: '.pp-row',
   // Modals
   phoneNumberModal: '.modal',
   paymentMethodModal: '.modal',
+  carSearchModal: '//div[contains(text(), "Car search")]',
+  driverModal: '//div[contains(text(), "The driver will arrive in")]',
+
   // Functions
   fillAddresses: async function (from, to) {
     const fromField = await $(this.fromField);

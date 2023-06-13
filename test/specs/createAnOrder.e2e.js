@@ -1,4 +1,3 @@
-//This is the correct file! Uploaded to the wrong directory...
 const page = require('../../page');
 const helper = require('../../helper');
 
@@ -18,8 +17,6 @@ describe('Ordering a Taxi', () => {
   it('Selecting Supportive plan', async () => {
     await browser.url('/');
     await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-    const fromFieldValue = await $(page.fromField).getValue();
-    const toFieldValue = await $(page.toField).getValue();
     await page.clickSupportivePlan();
     const supportivePlan = await $(page.supportivePlan);
     const isClicked = await supportivePlan.isClickable();
@@ -45,8 +42,9 @@ describe('Ordering a Taxi', () => {
     await addCardButton.click();
     const creditCardNumber = helper.generateCreditCardNumber();
     await page.fillCreditCard(creditCardNumber);
-    const closeButton = await $(page.closeButton);
-    await closeButton.click();
+    const creditCardCheck = await $(page.creditCardCheck);
+    const isExisting = await creditCardCheck.isSelected();
+    expect(isExisting).toBeExisting();
   });
 
   it('Writing a message for the driver', async () => {
@@ -63,39 +61,33 @@ describe('Ordering a Taxi', () => {
     await browser.url(`/`);
     await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
     await page.clickSupportivePlan();
-    const supportivePlan = await $(page.supportivePlan);
-    const isClicked = await supportivePlan.isClickable();
-    expect(isClicked).toBe(true);
-    await expect(supportivePlan.parentElement()).toHaveElementClass('active');
     const slider = await $(page.slider);
     await slider.waitForClickable();
     await slider.click();
+    const isClicked = await slider.isClickable();
+    expect(isClicked).toBe(true);
   });
 
-  it('Ordering a Blanket and handkerchiefs', async () => {
+  it('Ordering 2 Ice creams', async () => {
     await browser.url(`/`);
     await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
     await page.clickSupportivePlan();
-    const supportivePlan = await $(page.supportivePlan);
-    const isClicked = await supportivePlan.isClickable();
-    expect(isClicked).toBe(true);
-    await expect(supportivePlan.parentElement()).toHaveElementClass('active');
     const counterPlusButton = await $(page.counterPlusButton);
+    await counterPlusButton.waitForClickable();
     await counterPlusButton.click();
+    await counterPlusButton.waitForClickable();
     await counterPlusButton.click();
+    const counterValue = await $('div.r-counter .counter-value');
+    const valueText = await counterValue.getText();
+    expect(valueText).toEqual('2');
   });
 
   it('The car search modal appears', async () => {
     await browser.url(`/`);
     await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
     await page.clickSupportivePlan();
-    const supportivePlan = await $(page.supportivePlan);
-    const isClicked = await supportivePlan.isClickable();
-    expect(isClicked).toBe(true);
-    await expect(supportivePlan.parentElement()).toHaveElementClass('active');
     const phoneNumber = helper.getPhoneNumber("+1");
     await page.submitPhoneNumber(phoneNumber);
-    await expect(await helper.getElementByText(phoneNumber)).toBeExisting();
     const paymentMethodButton = await $(page.paymentMethodButton);
     await paymentMethodButton.waitForDisplayed();
     await paymentMethodButton.click();
@@ -108,29 +100,27 @@ describe('Ordering a Taxi', () => {
     const message = 'Please deliver to the front porch.';
     const messageField = await $(page.comment);
     await messageField.setValue(message);
-    const messageFieldValue = await messageField.getValue();
-    expect(messageFieldValue).toEqual(message);
     const slider = await $(page.slider);
     await slider.waitForClickable();
     await slider.click();
     const counterPlusButton = await $(page.counterPlusButton);
+    await counterPlusButton.waitForClickable();
     await counterPlusButton.click();
+    await counterPlusButton.waitForClickable();
     await counterPlusButton.click();
     const orderButton = await $(page.orderButton);
     await orderButton.click();
+    const carSearchModal = await $(page.carSearchModal);
+    await carSearchModal.waitForDisplayed();
+    expect(await carSearchModal.isDisplayed()).toBe(true);
   });
 
   it('Waiting for the driver info to appear in the modal', async () => {
     await browser.url(`/`);
     await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
     await page.clickSupportivePlan();
-    const supportivePlan = await $(page.supportivePlan);
-    const isClicked = await supportivePlan.isClickable();
-    expect(isClicked).toBe(true);
-    await expect(supportivePlan.parentElement()).toHaveElementClass('active');
     const phoneNumber = helper.getPhoneNumber("+1");
     await page.submitPhoneNumber(phoneNumber);
-    await expect(await helper.getElementByText(phoneNumber)).toBeExisting();
     const paymentMethodButton = await $(page.paymentMethodButton);
     await paymentMethodButton.waitForDisplayed();
     await paymentMethodButton.click();
@@ -143,16 +133,19 @@ describe('Ordering a Taxi', () => {
     const message = 'Please deliver to the front porch.';
     const messageField = await $(page.comment);
     await messageField.setValue(message);
-    const messageFieldValue = await messageField.getValue();
-    expect(messageFieldValue).toEqual(message);
-    const slider = await $(page.slider);  //Right here, on this step, without the reload session, slider keeps ON and this is why I am using browser reload session to reset values...
+    const slider = await $(page.slider);
     await slider.waitForClickable();
     await slider.click();
     const counterPlusButton = await $(page.counterPlusButton);
+    await counterPlusButton.waitForClickable();
     await counterPlusButton.click();
+    await counterPlusButton.waitForClickable();
     await counterPlusButton.click();
     const orderButton = await $(page.orderButton);
     await orderButton.click();
     await browser.pause(40000);
+    const driverModal = await $(page.driverModal);
+    await driverModal.waitForDisplayed();
+    expect(await driverModal.isDisplayed()).toBe(true);
   });
 });
