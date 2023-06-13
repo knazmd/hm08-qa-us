@@ -4,7 +4,7 @@ const helper = require('../../helper');
 describe('Ordering a Taxi', () => {
   beforeEach(async () => {
     await browser.reloadSession(); 
-    });
+    });// It's not nessesary to reset values every time, but I prefer to do this for clear results, specially when clicking the slider(P.S. it slower for 14 sec on my PC)
   it('Setting the adddress', async () => {
     await browser.url('/');
     await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
